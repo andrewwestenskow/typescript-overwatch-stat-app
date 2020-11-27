@@ -1,5 +1,5 @@
 export interface ContextProps {
-  children: React.ReactChildren;
+  children: React.ReactChild;
 }
 
 export interface ReducerAction {

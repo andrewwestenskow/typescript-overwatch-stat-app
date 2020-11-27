@@ -7,21 +7,19 @@
  */
 
 import React from 'react';
+import {View, Text} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import PlayersProvider from 'context/stores/players';
-import AuthRoutes from './routes/AuthRoutes';
-import GameDataProvider from './context/stores/gameData';
-import {drawerRef} from './routes/DrawerNav';
 
 const App = () => {
   return (
-    <GameDataProvider>
-      <PlayersProvider>
-        <NavigationContainer ref={drawerRef}>
-          <AuthRoutes />
-        </NavigationContainer>
-      </PlayersProvider>
-    </GameDataProvider>
+    <PlayersProvider>
+      <NavigationContainer>
+        <View>
+          <Text>Hello World</Text>
+        </View>
+      </NavigationContainer>
+    </PlayersProvider>
   );
 };
 
