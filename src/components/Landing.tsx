@@ -1,17 +1,16 @@
 import React, {useEffect} from 'react';
-import {View, Text} from 'react-native';
-import httpRequest from 'utils/httpRequest';
-import {usePlayersContext} from 'context/stores/players';
 import safeView from 'components/safeView';
+import {View, Text} from 'react-native';
+import UI from 'ui';
+import {usePlayersContext} from 'context/stores/players';
 import {useNavigation} from '@react-navigation/native';
 import {Player} from 'types/Users';
-import styles from 'styles';
+import {EmptyProps} from 'types/Utility';
 import AsyncStorage from '@react-native-community/async-storage';
-import UI from 'ui';
+import httpRequest from 'utils/httpRequest';
+import styles from 'styles';
 
-interface LandingProps {}
-
-const Landing: React.FC<LandingProps> = () => {
+const Landing: React.FC<EmptyProps> = () => {
   const navigation = useNavigation();
   const {setPlayers, getPlayers, setPlayer} = usePlayersContext();
 

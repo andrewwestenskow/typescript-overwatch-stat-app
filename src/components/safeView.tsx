@@ -34,6 +34,6 @@ const styles = StyleSheet.create({
   scrollView: {
     minHeight: windowHeight,
     width: windowWidth,
-    backgroundColor: '#425583',
+    backgroundColor: '#2d3356',
   },
 });
