@@ -1,13 +1,15 @@
 import React, {createContext, useReducer, useContext} from 'react';
-import {ContextProps, ReducerAction} from 'types/Context';
+import {ReducerAction} from 'types/Context';
 import {Player} from 'types/Users';
 import httpRequest from 'utils/httpRequest';
 
+const missingContext = () => console.warn('Missing players provider');
 interface PlayerState {
   players: Array<Player>;
   player: Player;
-  getPlayers?: () => Promise<void>;
-  setPlayer?: (player: Player) => void;
+  getPlayers: Function;
+  setPlayer: Function;
+  setPlayers: Function;
 }
 
 type availableActions = 'SET_PLAYER' | 'SET_PLAYERS';
@@ -23,7 +25,7 @@ function reducer(state: PlayerState, action: PlayersAction) {
     case 'SET_PLAYERS':
       return {...state, players: action.payload};
     default:
-      throw new Error('Unsupported action provided to players context');
+      throw new Error('Unsupported action type provided to players context');
   }
 }
 
@@ -37,15 +39,18 @@ const initialState: PlayerState = {
     damage_sr: null,
     support_sr: null,
   },
+  getPlayers: missingContext,
+  setPlayer: missingContext,
+  setPlayers: missingContext,
 };
 
 const PlayersContext = createContext<PlayerState>(initialState);
 PlayersContext.displayName = 'PlayersStore';
 
-export default (props: ContextProps) => {
+const PlayersProvider: React.FC = (props) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const getPlayers = async () => {
+  const getPlayers = async (): Promise<Player[]> => {
     const res = await httpRequest({method: 'GET', url: '/players'});
     dispatch({type: 'SET_PLAYERS', payload: res});
     return res;
@@ -55,6 +60,10 @@ export default (props: ContextProps) => {
     dispatch({type: 'SET_PLAYER', payload: player});
   };
 
+  const setPlayers = (players: Player[]) => {
+    dispatch({type: 'SET_PLAYERS', payload: players});
+  };
+
   return (
     <PlayersContext.Provider
       value={{
@@ -62,6 +71,7 @@ export default (props: ContextProps) => {
         player: state.player,
         getPlayers,
         setPlayer,
+        setPlayers,
       }}>
       {props.children}
     </PlayersContext.Provider>
@@ -72,5 +82,5 @@ const usePlayersContext = (): PlayerState => {
   const playerContext = useContext(PlayersContext);
   return playerContext;
 };
-
+export default PlayersProvider;
 export {usePlayersContext};

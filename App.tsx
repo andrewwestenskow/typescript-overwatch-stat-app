@@ -5,19 +5,17 @@
  * @format
  * @flow strict-local
  */
-
+import 'react-native-gesture-handler';
 import React from 'react';
-import {View, Text} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
+import AuthRoutes from 'routes/AuthRoutes';
 import PlayersProvider from 'context/stores/players';
 
 const App = () => {
   return (
     <PlayersProvider>
       <NavigationContainer>
-        <View>
-          <Text>Hello World</Text>
-        </View>
+        <AuthRoutes />
       </NavigationContainer>
     </PlayersProvider>
   );
