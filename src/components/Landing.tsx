@@ -3,6 +3,7 @@ import safeView from 'components/safeView';
 import {View, Text} from 'react-native';
 import UI from 'ui';
 import {usePlayersContext} from 'context/stores/players';
+import {useGameDataContext} from 'context/stores/gameData';
 import {useNavigation} from '@react-navigation/native';
 import {Player} from 'types/Users';
 import {EmptyProps} from 'types/Utility';
@@ -13,12 +14,12 @@ import styles from 'styles';
 const Landing: React.FC<EmptyProps> = () => {
   const navigation = useNavigation();
   const {setPlayers, getPlayers, setPlayer} = usePlayersContext();
-
+  const {getGameData} = useGameDataContext();
   useEffect(() => {
     httpRequest({method: 'GET', url: '/auth'})
       .then(async (res) => {
         await AsyncStorage.setItem('token', res.token);
-        // await getGameData();
+        await getGameData();
         getPlayers().then((players: Player[]) => {
           setPlayers(players);
           if (players[0]) {

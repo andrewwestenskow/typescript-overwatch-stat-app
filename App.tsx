@@ -10,14 +10,17 @@ import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import AuthRoutes from 'routes/AuthRoutes';
 import PlayersProvider from 'context/stores/players';
+import GameDataProvider from 'context/stores/gameData';
 
 const App = () => {
   return (
-    <PlayersProvider>
-      <NavigationContainer>
-        <AuthRoutes />
-      </NavigationContainer>
-    </PlayersProvider>
+    <GameDataProvider>
+      <PlayersProvider>
+        <NavigationContainer>
+          <AuthRoutes />
+        </NavigationContainer>
+      </PlayersProvider>
+    </GameDataProvider>
   );
 };
 

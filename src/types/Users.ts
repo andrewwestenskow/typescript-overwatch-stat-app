@@ -6,3 +6,10 @@ export interface Player {
   damage_sr: number | null;
   support_sr: number | null;
 }
+
+export interface AuthRes {
+  email: string;
+  id: number;
+  token: string;
+  token_expire: string;
+}

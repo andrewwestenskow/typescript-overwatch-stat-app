@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 interface RequestArgs {
   method: 'GET' | 'POST' | 'PUT' | 'DELETE';
   url: string;
-  data?: any;
+  data?: Object;
 }
 
 export default async (args: RequestArgs): Promise<any> => {
@@ -19,7 +19,9 @@ export default async (args: RequestArgs): Promise<any> => {
 
   //! PROD
   const fullUrl = 'http://64.227.14.5:3050/api' + url;
+
   const authToken = await AsyncStorage.getItem('token');
+
   return new Promise((resolve, reject) => {
     axios({
       data,
@@ -34,7 +36,9 @@ export default async (args: RequestArgs): Promise<any> => {
       })
       .catch((err) => {
         console.warn(err);
-        console.warn('Token: ', authToken);
+        if (!authToken) {
+          console.log('Token: ', authToken);
+        }
         reject(err);
       });
   });
