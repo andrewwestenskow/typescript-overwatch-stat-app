@@ -13,7 +13,11 @@ const ResultsRoutes: React.FC<RouteProps> = (props) => {
       screenOptions={{
         header: () => <ResultsHeader />,
       }}>
-      <Results.Screen name="Results" component={DrawerNav} />
+      <Results.Screen name="Results">
+        {(newProps) => (
+          <DrawerNav {...newProps} authNavigate={props.authNavigate} />
+        )}
+      </Results.Screen>
     </Results.Navigator>
   );
 };

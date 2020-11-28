@@ -1,9 +1,10 @@
 import React, {createRef} from 'react';
 import ResultsMain from 'components/Results/ResultsMain';
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import {usePlayersContext} from 'context/stores/players';
+import {RouteProps} from 'types/Utility';
 import {DrawerActions} from '@react-navigation/native';
 import {NavigationContainerRef} from '@react-navigation/native';
+import CustomDrawer from './NavComponents/Drawer';
 
 const Drawer = createDrawerNavigator();
 
@@ -23,13 +24,12 @@ export function toggleDrawer() {
 }
 
 //* Drawer renders screens
-const DrawerNav: React.FC = (props) => {
-  const {player} = usePlayersContext();
+const DrawerNav: React.FC<RouteProps> = (props) => {
   return (
     <Drawer.Navigator
-      // drawerContent={(newProps) => (
-      //   <CustomDrawer {...newProps} authNavigate={props.authNavigate} />
-      // )}
+      drawerContent={(newProps) => (
+        <CustomDrawer {...newProps} authNavigate={props.authNavigate} />
+      )}
       screenOptions={{unmountOnBlur: true, header: () => null}}
       drawerType="front"
       initialRouteName="Results">
