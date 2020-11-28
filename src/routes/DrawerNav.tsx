@@ -1,5 +1,6 @@
 import React, {createRef} from 'react';
 import ResultsMain from 'components/Results/ResultsMain';
+import AddPlayerForm from 'components/Auth/AddPlayerForm';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {RouteProps} from 'types/Utility';
 import {DrawerActions} from '@react-navigation/native';
@@ -34,6 +35,7 @@ const DrawerNav: React.FC<RouteProps> = (props) => {
       drawerType="front"
       initialRouteName="Results">
       <Drawer.Screen name="Results" component={ResultsMain} />
+      <Drawer.Screen name="Add Player" component={AddPlayerForm} />
     </Drawer.Navigator>
   );
 };
