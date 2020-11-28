@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {View, Text} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import safeView from 'components/safeView';
-import {AuthRes, Player} from 'types/Users';
+import {AuthRes} from 'types/Users';
 import {EmptyProps} from 'types/Utility';
 import {useNavigation} from '@react-navigation/native';
 import {useGameDataContext} from 'context/stores/gameData';

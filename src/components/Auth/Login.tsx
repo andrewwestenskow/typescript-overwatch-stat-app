@@ -6,6 +6,7 @@ import {AuthRes, Player} from 'types/Users';
 import {EmptyProps} from 'types/Utility';
 import {usePlayersContext} from 'context/stores/players';
 import {useGameDataContext} from 'context/stores/gameData';
+import {useNavigation} from '@react-navigation/native';
 import styles from 'styles';
 import UI from 'ui';
 import httpRequest from 'utils/httpRequest';
@@ -15,8 +16,10 @@ const Login: React.FC<EmptyProps> = (props) => {
   const [emailInput, setEmailInput] = useState<string>('');
   const [passwordInput, setPasswordInput] = useState<string>('');
 
-  const {getPlayers, setPlayer} = usePlayersContext();
+  const {getPlayers, setPlayer, setPlayers} = usePlayersContext();
   const {getGameData} = useGameDataContext();
+
+  const navigation = useNavigation();
 
   const handleLogin = (): void => {
     setIsLoading(true);
@@ -29,8 +32,20 @@ const Login: React.FC<EmptyProps> = (props) => {
         await AsyncStorage.setItem('token', res.token);
         await getGameData();
         getPlayers().then((players: Player[]) => {
+          setPlayers(players);
           if (players[0]) {
             setPlayer(players[0]);
+            navigation.navigate('ResultsContainer');
+          } else {
+            navigation.navigate('ResultsContainer', {
+              screen: 'Results',
+              params: {
+                screen: 'Drawer',
+                params: {
+                  screen: 'Add Player',
+                },
+              },
+            });
           }
         });
       },
