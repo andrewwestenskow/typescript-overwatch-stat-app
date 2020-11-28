@@ -1,5 +1,4 @@
 import React, {createContext, useReducer, useContext} from 'react';
-import {G} from 'react-native-svg';
 import {ReducerAction} from 'types/Context';
 import {Hero, Map} from 'types/Game';
 import httpRequest from 'utils/httpRequest';

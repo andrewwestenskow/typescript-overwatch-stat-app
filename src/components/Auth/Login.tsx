@@ -3,13 +3,14 @@ import {View, Text} from 'react-native';
 import AsyncStorage from '@react-native-community/async-storage';
 import safeView from 'components/safeView';
 import {AuthRes, Player} from 'types/Users';
+import {EmptyProps} from 'types/Utility';
 import {usePlayersContext} from 'context/stores/players';
 import {useGameDataContext} from 'context/stores/gameData';
 import styles from 'styles';
 import UI from 'ui';
 import httpRequest from 'utils/httpRequest';
 
-const Login: React.FC = (props) => {
+const Login: React.FC<EmptyProps> = (props) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [emailInput, setEmailInput] = useState<string>('');
   const [passwordInput, setPasswordInput] = useState<string>('');

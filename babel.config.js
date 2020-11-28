@@ -15,6 +15,7 @@ module.exports = {
           '@utils': './src/utils',
           '@routes': './src/routes',
           '@ui': './src/ui',
+          '@constants': './src/constants',
         },
       },
     ],
