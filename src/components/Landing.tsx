@@ -24,9 +24,9 @@ const Landing: React.FC<EmptyProps> = () => {
           setPlayers(players);
           if (players[0]) {
             setPlayer(players[0]);
-            navigation.navigate('ResultsContainer');
+            navigation.navigate('Main');
           } else {
-            navigation.navigate('ResultsContainer', {
+            navigation.navigate('Main', {
               screen: 'Results',
               params: {
                 screen: 'Drawer',

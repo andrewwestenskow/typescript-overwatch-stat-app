@@ -40,7 +40,6 @@ const GameDataProvider: React.FC = (props) => {
     const mapData = await httpRequest({method: 'GET', url: '/maps'});
     const heroData = await httpRequest({method: 'GET', url: '/heroes'});
 
-    console.log(heroData);
     dispatch({
       type: 'SET_GAME_DATA',
       payload: {heroes: heroData, maps: mapData},

@@ -8,4 +8,8 @@ export default StyleSheet.create({
     fontSize: 42,
     textAlign: 'center',
   },
+  heading: {
+    color: '#fff',
+    fontSize: 24,
+  },
 });

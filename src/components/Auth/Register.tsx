@@ -4,8 +4,10 @@ import AsyncStorage from '@react-native-community/async-storage';
 import safeView from 'components/safeView';
 import {AuthRes} from 'types/Users';
 import {EmptyProps} from 'types/Utility';
+import {Player} from 'types/Users';
 import {useNavigation} from '@react-navigation/native';
 import {useGameDataContext} from 'context/stores/gameData';
+import {usePlayersContext} from 'context/stores/players';
 import platforms, {Platform} from 'constants/platforms';
 import styles from 'styles';
 import UI from 'ui';
@@ -19,6 +21,7 @@ const Register: React.FC<EmptyProps> = (props) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const {getGameData} = useGameDataContext();
+  const {setPlayer, setPlayers, getPlayers} = usePlayersContext();
   const navigation = useNavigation();
 
   const handleRegister = () => {
@@ -36,14 +39,22 @@ const Register: React.FC<EmptyProps> = (props) => {
       async (res: AuthRes): Promise<void> => {
         await AsyncStorage.setItem('token', res.token);
         await getGameData();
-        navigation.navigate('ResultsContainer', {
-          screen: 'Results',
-          params: {
-            screen: 'Drawer',
-            params: {
-              screen: 'Add Player',
-            },
-          },
+        getPlayers().then((players: Player[]) => {
+          setPlayers(players);
+          if (players[0]) {
+            setPlayer(players[0]);
+            navigation.navigate('Main');
+          } else {
+            navigation.navigate('Main', {
+              screen: 'Results',
+              params: {
+                screen: 'Drawer',
+                params: {
+                  screen: 'Add Player',
+                },
+              },
+            });
+          }
         });
       },
     );
@@ -78,7 +89,7 @@ const Register: React.FC<EmptyProps> = (props) => {
           />
           <UI.Select
             selectedValue={platform}
-            onValueChange={(value) => setPlatform(+value)}>
+            onValueChange={(value: string) => setPlatform(+value)}>
             {platforms.map((e: Platform) => (
               <UI.Option key={e.id} value={e.id} label={e.name} />
             ))}
