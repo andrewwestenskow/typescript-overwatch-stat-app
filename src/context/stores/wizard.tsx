@@ -1,10 +1,9 @@
-import React, {createContext, useReducer, useContext} from 'react';
-import {ReducerAction} from 'types/Context';
+import React, {createContext, useReducer, useContext, useState} from 'react';
 import httpRequest from 'utils/httpRequest';
 import {usePlayersContext} from 'context/stores/players';
-import {useGameDataContext} from 'context/stores/gameData';
 import {Hero} from 'types/Game';
-import {Player} from 'types/Users';
+
+const fallback = () => console.warn('No wizard provider found');
 
 const {player} = usePlayersContext();
 
@@ -17,13 +16,18 @@ interface WizardState {
   map_id: number | null;
   win: boolean | null;
   heroes: WizardHero[];
+  isSubmitting: boolean;
+  setMapId: Function;
+  setWin: Function;
+  modifyHeroes: Function;
+  submitMatch: Function;
 }
 
 type availableActions = 'SET_MAP' | 'SET_WIN' | 'MODIFY_HEROES';
 
-interface WizardAction extends ReducerAction {
+interface WizardAction {
   type: availableActions;
-  action: Record<string, string | number> | WizardHero;
+  payload: Record<string, string | number | boolean> | WizardHero;
 }
 
 function deriveHeroChanges(
@@ -62,6 +66,8 @@ function reducer(state: WizardState, action: WizardAction): WizardState {
       if (isWizardHero(action.payload)) {
         const modifiedHeroes = deriveHeroChanges(state.heroes, action.payload);
         return {...state, heroes: modifiedHeroes};
+      } else {
+        return state;
       }
     default:
       console.warn('Unsupported action type passed to wizard reducer');
@@ -74,6 +80,11 @@ const initialSate: WizardState = {
   map_id: null,
   win: null,
   heroes: [],
+  isSubmitting: false,
+  setMapId: fallback,
+  setWin: fallback,
+  modifyHeroes: fallback,
+  submitMatch: fallback,
 };
 
 const WizardContext = createContext<WizardState>(initialSate);
@@ -81,9 +92,44 @@ WizardContext.displayName = 'WizardStore';
 
 const WizardProvider: React.FC = (props) => {
   const [state, dispatch] = useReducer(reducer, initialSate);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
+  function setMapId(id: number) {
+    dispatch({type: 'SET_MAP', payload: {map_id: id}});
+  }
+
+  function setWin(isWin: boolean) {
+    dispatch({type: 'SET_WIN', payload: {win: isWin}});
+  }
+
+  function modifyHeroes(hero: WizardHero) {
+    dispatch({type: 'MODIFY_HEROES', payload: hero});
+  }
+
+  function submitMatch() {
+    setIsSubmitting(true);
+    return httpRequest({
+      method: 'POST',
+      url: `/results/${player.id}`,
+      data: {
+        player_id: player.id,
+        map_id: state.map_id,
+        win: state.win,
+        heroes: state.heroes,
+      },
+    }).finally(() => setIsSubmitting(false));
+  }
 
   return (
-    <WizardContext.Provider value={{...state}}>
+    <WizardContext.Provider
+      value={{
+        ...state,
+        setMapId,
+        setWin,
+        modifyHeroes,
+        submitMatch,
+        isSubmitting,
+      }}>
       {props.children}
     </WizardContext.Provider>
   );
