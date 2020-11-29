@@ -4,5 +4,5 @@ export interface ContextProps {
 
 export interface ReducerAction {
   type: string;
-  payload: any;
+  payload: Record<string, string | number>;
 }
