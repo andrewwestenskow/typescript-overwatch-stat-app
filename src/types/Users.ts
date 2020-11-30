@@ -1,11 +1,11 @@
 export interface Player {
+  id: number;
   name: string;
   private: boolean;
   portrait: string;
   tank_sr: number | null;
   damage_sr: number | null;
   support_sr: number | null;
-  id: number;
 }
 
 export interface AuthRes {

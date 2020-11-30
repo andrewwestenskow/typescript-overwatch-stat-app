@@ -1,17 +1,17 @@
 import React from 'react';
-import {EmptyProps} from 'types/Utility';
 import {View, TouchableOpacity, Text, StyleSheet} from 'react-native';
+import {BottomTabBarProps} from '@react-navigation/bottom-tabs';
 
-const TabNav: React.FC<EmptyProps> = (props) => {
+const TabNav: React.FC<BottomTabBarProps> = ({navigation}) => {
   return (
     <View style={styles.tabNav}>
       <TouchableOpacity
-        // onPress={() => navigateDrawer('Results')}
+        onPress={() => navigation.navigate('Results')}
         style={{...styles.navSection, ...styles.leftSection}}>
         <Text style={styles.navText}>Results</Text>
       </TouchableOpacity>
       <TouchableOpacity
-        // onPress={() => navigateDrawer('Add Match')}
+        onPress={() => navigation.navigate('Results Wizard')}
         style={styles.middle}>
         <Text style={styles.navText}>Add Match</Text>
       </TouchableOpacity>

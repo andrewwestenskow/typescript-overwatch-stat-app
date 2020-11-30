@@ -21,7 +21,7 @@ const Register: React.FC<EmptyProps> = (props) => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const {getGameData} = useGameDataContext();
-  const {setPlayer, setPlayers, getPlayers} = usePlayersContext();
+  const {setPlayer, getPlayers} = usePlayersContext();
   const navigation = useNavigation();
 
   const handleRegister = () => {
@@ -40,7 +40,6 @@ const Register: React.FC<EmptyProps> = (props) => {
         await AsyncStorage.setItem('token', res.token);
         await getGameData();
         getPlayers().then((players: Player[]) => {
-          setPlayers(players);
           if (players[0]) {
             setPlayer(players[0]);
             navigation.navigate('Main');

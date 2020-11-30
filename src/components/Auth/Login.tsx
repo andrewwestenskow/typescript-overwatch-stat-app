@@ -16,7 +16,7 @@ const Login: React.FC<EmptyProps> = (props) => {
   const [emailInput, setEmailInput] = useState<string>('');
   const [passwordInput, setPasswordInput] = useState<string>('');
 
-  const {getPlayers, setPlayer, setPlayers} = usePlayersContext();
+  const {getPlayers, setPlayer} = usePlayersContext();
   const {getGameData} = useGameDataContext();
 
   const navigation = useNavigation();
@@ -32,7 +32,6 @@ const Login: React.FC<EmptyProps> = (props) => {
         await AsyncStorage.setItem('token', res.token);
         await getGameData();
         getPlayers().then((players: Player[]) => {
-          setPlayers(players);
           if (players[0]) {
             setPlayer(players[0]);
             navigation.navigate('Main');

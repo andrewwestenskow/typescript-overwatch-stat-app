@@ -5,8 +5,6 @@ import {Hero} from 'types/Game';
 
 const fallback = () => console.warn('No wizard provider found');
 
-const {player} = usePlayersContext();
-
 interface WizardHero extends Hero {
   game_round_id: number;
 }
@@ -76,7 +74,7 @@ function reducer(state: WizardState, action: WizardAction): WizardState {
 }
 
 const initialSate: WizardState = {
-  player_id: player.id,
+  player_id: 0,
   map_id: null,
   win: null,
   heroes: [],
@@ -93,6 +91,7 @@ WizardContext.displayName = 'WizardStore';
 const WizardProvider: React.FC = (props) => {
   const [state, dispatch] = useReducer(reducer, initialSate);
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+  const {player} = usePlayersContext();
 
   function setMapId(id: number) {
     dispatch({type: 'SET_MAP', payload: {map_id: id}});

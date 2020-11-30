@@ -1,29 +1,34 @@
 import React, {createContext, useReducer, useContext} from 'react';
 import {ReducerAction} from 'types/Context';
+import {typeArray, isType} from 'types/Utility';
 import {Player} from 'types/Users';
 import httpRequest from 'utils/httpRequest';
 
 const missingContext = () => console.warn('Missing players provider');
 interface PlayerState {
-  players: Array<Player>;
+  players: Player[];
   player: Player;
   getPlayers: Function;
   setPlayer: Function;
-  setPlayers: Function;
 }
 
 type availableActions = 'SET_PLAYER' | 'SET_PLAYERS';
 
-interface PlayersAction extends ReducerAction {
+type PlayersAction = {
   type: availableActions;
-}
+  payload: any;
+};
 
-function reducer(state: PlayerState, action: PlayersAction) {
+function reducer(state: PlayerState, action: PlayersAction): PlayerState {
   switch (action.type) {
     case 'SET_PLAYER':
-      return {...state, player: action.payload};
+      if (isType<Player>(action.payload)) {
+        return {...state, player: action.payload};
+      }
     case 'SET_PLAYERS':
-      return {...state, players: action.payload};
+      if (typeArray<Player>(action.payload)) {
+        return {...state, players: action.payload};
+      }
     default:
       throw new Error('Unsupported action type provided to players context');
   }
@@ -32,6 +37,7 @@ function reducer(state: PlayerState, action: PlayersAction) {
 const initialState: PlayerState = {
   players: [],
   player: {
+    id: 0,
     name: 'No Player Found',
     private: true,
     portrait: '',
@@ -41,7 +47,6 @@ const initialState: PlayerState = {
   },
   getPlayers: missingContext,
   setPlayer: missingContext,
-  setPlayers: missingContext,
 };
 
 const PlayersContext = createContext<PlayerState>(initialState);
@@ -60,10 +65,6 @@ const PlayersProvider: React.FC = (props) => {
     dispatch({type: 'SET_PLAYER', payload: player});
   };
 
-  const setPlayers = (players: Player[]) => {
-    dispatch({type: 'SET_PLAYERS', payload: players});
-  };
-
   return (
     <PlayersContext.Provider
       value={{
@@ -71,7 +72,6 @@ const PlayersProvider: React.FC = (props) => {
         player: state.player,
         getPlayers,
         setPlayer,
-        setPlayers,
       }}>
       {props.children}
     </PlayersContext.Provider>

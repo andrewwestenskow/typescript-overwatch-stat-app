@@ -13,7 +13,7 @@ import styles from 'styles';
 
 const Landing: React.FC<EmptyProps> = () => {
   const navigation = useNavigation();
-  const {setPlayers, getPlayers, setPlayer} = usePlayersContext();
+  const {getPlayers, setPlayer} = usePlayersContext();
   const {getGameData} = useGameDataContext();
   useEffect(() => {
     httpRequest({method: 'GET', url: '/auth'})
@@ -21,7 +21,6 @@ const Landing: React.FC<EmptyProps> = () => {
         await AsyncStorage.setItem('token', res.token);
         await getGameData();
         getPlayers().then((players: Player[]) => {
-          setPlayers(players);
           if (players[0]) {
             setPlayer(players[0]);
             navigation.navigate('Main');
